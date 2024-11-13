@@ -1,0 +1,113 @@
+MORALES GAYTAN JEAN PIERE
+TRANSFORMACIONES:
+1.MAP: rdd = sc.parallelize(["Cielo", "Nube", "Estrella", "Galaxia"])
+rdd_map = rdd.map(lambda palabra: (palabra, len(palabra)))
+print(rdd_map.collect())
+
+2.Filter:
+rdd = sc.parallelize([5, 18, 33, 42, 28, 12, 61])
+rdd_filter = rdd.filter(lambda x: x % 2 == 0) 
+print(rdd_filter.collect())
+
+3.FlatMap:
+rdd = sc.parallelize(["sol luna", "mar tierra", "cielo nube"])
+rdd_flatMap = rdd.flatMap(lambda x: x.split(" ")) 
+print(rdd_flatMap.collect())
+
+4.Union:
+rdd1 = sc.parallelize(["Manzana", "Uva"])
+rdd2 = sc.parallelize(["Sandía", "Durazno"])
+rdd_union = rdd1.union(rdd2) 
+print(rdd_union.collect())
+
+5.Intersection:
+rdd1 = sc.parallelize(["Laura", "David", "Carlos", "Ana", "Raúl"])
+rdd2 = sc.parallelize(["David", "Julia", "Ana", "Diego"])
+rdd_intersection = rdd1.intersection(rdd2)
+print(rdd_intersection.collect())
+
+6.Distinct:
+rdd = sc.parallelize(["sol", "luna", "sol", "estrella", "luna", "cometa"])
+rdd_distinct = rdd.distinct() 
+print(rdd_distinct.collect())
+
+7.GroupByKey:
+rdd = sc.parallelize([("animal", "perro"), ("animal", "gato"), ("fruta", "naranja"), ("animal", "león")])
+rdd_groupByKey = rdd.groupByKey().mapValues(list)
+print(rdd_groupByKey.collect())
+
+8.ReduceByKey:
+rdd = sc.parallelize([("x", 4), ("y", 2), ("x", 3), ("y", 6)])
+rdd_reduceByKey = rdd.reduceByKey(lambda x, y: x + y)
+print(rdd_reduceByKey.collect())
+
+9.SortByKey:
+rdd = sc.parallelize([(5, "cinco"), (2, "dos"), (9, "nueve")])
+rdd_sortByKey = rdd.sortByKey()  # Ordena por clave
+print(rdd_sortByKey.collect())
+
+10.Join:
+rdd1 = sc.parallelize([("id3", "Lucía"), ("id4", "Andrés")])
+rdd2 = sc.parallelize([("id3", 25), ("id4", 32)])
+rdd_join = rdd1.join(rdd2)
+print(rdd_join.collect())
+
+11.Cogroup:
+rdd1 = sc.parallelize([("x", 10), ("y", 20), ("z", 30)])
+rdd2 = sc.parallelize([("x", "primero"), ("y", "segundo")])
+rdd_cogroup = rdd1.cogroup(rdd2).mapValues(lambda x: (list(x[0]), list(x[1])))
+print(rdd_cogroup.collect())
+
+12.Coalesce:
+rdd = sc.parallelize(range(1, 100), 8)
+rdd_coalesce = rdd.coalesce(3)
+print(rdd_coalesce.glom().collect())
+
+ACCIONES:
+
+1.Reduce:
+rdd = sc.parallelize([2, 3, 7, 1])
+resultado_reduce = rdd.reduce(lambda x, y: x + y)
+print(resultado_reduce)
+
+2.Collect:
+rdd = sc.parallelize([10, 20, 30, 40, 50])
+resultado_collect = rdd.filter(lambda x: x > 25).collect()
+print(resultado_collect)
+
+3.Count:
+rdd = sc.parallelize([5, 12, 15, 24, 30, 35])
+resultado_count = rdd.filter(lambda x: x % 5 == 0).count()
+print(resultado_count)
+
+4.First:
+rdd = sc.parallelize(["alpha", "beta", "gamma"])
+resultado_first = rdd.map(lambda x: x.upper()).first()
+print(resultado_first)
+
+5.Take:
+rdd = sc.parallelize([11, 22, 33, 44, 55, 66, 77])
+resultado_take = rdd.filter(lambda x: x % 2 == 0).take(2)
+print(resultado_take)
+
+6.SaveAsTextFile:
+rdd = sc.parallelize(["piano", "violin", "flauta", "batería"])
+resultado_rdd = rdd.map(lambda x: x.upper()).filter(lambda x: "A" in x)
+resultado_rdd.saveAsTextFile("/ruta/nuevo_archivo_salida")
+
+7.Max y Min:
+rdd = sc.parallelize([21, 45, 32, 13, 54, 29])
+resultado_max = rdd.filter(lambda x: x < 50).max()
+resultado_min = rdd.filter(lambda x: x < 50).min()
+print(resultado_max)
+print(resultado_min)
+
+8.CountByKey:
+rdd = sc.parallelize([("m", 5), ("n", 3), ("m", 2), ("o", 8), ("n", 6)])
+resultado_countByKey = rdd.filter(lambda x: x[1] > 3).countByKey()
+print(dict(resultado_countByKey))
+
+9.Foreach: 
+rdd = sc.parallelize(["rosa", "girasol", "margarita"])
+rdd.map(lambda x: x.upper()).foreach(lambda x: print(f"Transformado: {x}"))
+
